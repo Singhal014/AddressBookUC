@@ -15,8 +15,6 @@ namespace AddressBookUc
             {
                 Console.WriteLine($"\nManaging Address Book: {bookName}");
                 Console.WriteLine("1. Add Contact");
-                Console.WriteLine("2. Display Contacts");
-                Console.WriteLine("3. Edit Contact");
                 Console.WriteLine("5. Back to Main Menu");
                 Console.Write("Enter your choice: ");
 
@@ -48,13 +46,6 @@ namespace AddressBookUc
                     case "2":
                         Contact.DisplayContacts(bookName);
                         break;
-
-                    case "3":
-                        Contact.EditContact(bookName);
-                        break;
-
-                    case "5":
-                        return;
 
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
