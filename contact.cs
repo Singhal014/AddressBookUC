@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AddressBookUc
 {
@@ -14,6 +15,7 @@ namespace AddressBookUc
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
 
+        private static Dictionary<string, List<Contact>> addressBooks = new Dictionary<string, List<Contact>>();
 
         public Contact(string firstName, string lastName, string address, string city, string state, string zip, string phoneNumber, string email)
         {
@@ -25,6 +27,51 @@ namespace AddressBookUc
             Zip = zip;
             PhoneNumber = phoneNumber;
             Email = email;
+        }
+
+        // Create a new address book
+        public static void CreateAddressBook(string bookName)
+        {
+            if (!addressBooks.ContainsKey(bookName))
+            {
+                addressBooks[bookName] = new List<Contact>();
+                Console.WriteLine($"Address Book '{bookName}' created successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Address Book already exists.");
+            }
+        }
+
+        // Add a new contact to an address book, checking for duplicates
+        public static bool AddContact(string bookName, string firstName, string lastName, string address, string city, string state, string zip, string phoneNumber, string email)
+        {
+            if (addressBooks.ContainsKey(bookName))
+            {
+                foreach (var contact in addressBooks[bookName])
+                {
+                    if (contact.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) &&
+                        contact.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("Duplicate contact found! Contact not added.");
+                        return false;
+                    }
+                }
+
+                
+                Contact newContact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+                addressBooks[bookName].Add(newContact);
+                Console.WriteLine("Contact added successfully.");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Address Book not found.");
+                return false;
+            }
+        }
+
+        
         public static void DisplayContacts(string bookName)
         {
             if (addressBooks.ContainsKey(bookName))
@@ -51,94 +98,65 @@ namespace AddressBookUc
             }
         }
 
-        public static void EditContact(string bookName)
+        
+        public static void EditContact(string bookName, string firstName, string lastName)
         {
             if (addressBooks.ContainsKey(bookName))
             {
                 var contacts = addressBooks[bookName];
-                Console.Write("Enter First Name of contact to edit: ");
-                string firstName = Console.ReadLine();
-                Console.Write("Enter Last Name of contact to edit: ");
-                string lastName = Console.ReadLine();
+                var contactToEdit = contacts.FirstOrDefault(c => c.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) && c.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase));
 
-                Contact contactToEdit = null;
-                foreach (var contact in contacts)
+                if (contactToEdit != null)
                 {
-                    if (contact.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) && contact.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        contactToEdit = contact;
-                        break;
-                    }
+                    Console.Write("Enter new Address: ");
+                    contactToEdit.Address = Console.ReadLine();
+                    Console.Write("Enter new City: ");
+                    contactToEdit.City = Console.ReadLine();
+                    Console.Write("Enter new State: ");
+                    contactToEdit.State = Console.ReadLine();
+                    Console.Write("Enter new Zip: ");
+                    contactToEdit.Zip = Console.ReadLine();
+                    Console.Write("Enter new Phone Number: ");
+                    contactToEdit.PhoneNumber = Console.ReadLine();
+                    Console.Write("Enter new Email: ");
+                    contactToEdit.Email = Console.ReadLine();
+                    Console.WriteLine("Contact updated successfully.");
                 }
-
-                if (contactToEdit == null)
+                else
                 {
                     Console.WriteLine("Contact not found.");
-                    return;
                 }
-
-                bool edit = true;
-                while (edit)
-                {
-                    Console.WriteLine("Select the detail to edit:");
-                    Console.WriteLine("1. First Name");
-                    Console.WriteLine("2. Last Name");
-                    Console.WriteLine("3. Address");
-                    Console.WriteLine("4. City");
-                    Console.WriteLine("5. State");
-                    Console.WriteLine("6. Zip");
-                    Console.WriteLine("7. Phone Number");
-                    Console.WriteLine("8. Email");
-                    Console.WriteLine("9. Exit Editing");
-
-                    Console.Write("Enter your choice: ");
-                    string choice = Console.ReadLine();
-
-                    switch (choice)
-                    {
-                        case "1":
-                            Console.Write("New First Name: ");
-                            contactToEdit.FirstName = Console.ReadLine();
-                            break;
-                        case "2":
-                            Console.Write("New Last Name: ");
-                            contactToEdit.LastName = Console.ReadLine();
-                            break;
-                        case "3":
-                            Console.Write("New Address: ");
-                            contactToEdit.Address = Console.ReadLine();
-                            break;
-                        case "4":
-                            Console.Write("New City: ");
-                            contactToEdit.City = Console.ReadLine();
-                            break;
-                        case "5":
-                            Console.Write("New State: ");
-                            contactToEdit.State = Console.ReadLine();
-                            break;
-                        case "6":
-                            Console.Write("New Zip: ");
-                            contactToEdit.Zip = Console.ReadLine();
-                            break;
-                        case "7":
-                            Console.Write("New Phone Number: ");
-                            contactToEdit.PhoneNumber = Console.ReadLine();
-                            break;
-                        case "8":
-                            Console.Write("New Email: ");
-                            contactToEdit.Email = Console.ReadLine();
-                            break;
-                        case "9":
-                            edit = false;
-                            continue;
-                        default:
-                            Console.WriteLine("Invalid choice. Please try again.");
-                            continue;
-                    }
-
-                    Console.WriteLine("Contact updated successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Address Book not found.");
             }
         }
 
+        
+        public static void DeleteContact(string bookName, string firstName, string lastName)
+        {
+            if (addressBooks.ContainsKey(bookName))
+            {
+                var contacts = addressBooks[bookName];
+                var contactToDelete = contacts.FirstOrDefault(c => c.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase) && c.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase));
+
+                if (contactToDelete != null)
+                {
+                    contacts.Remove(contactToDelete);
+                    Console.WriteLine("Contact deleted successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Contact not found.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Address Book not found.");
+            }
+        }
+
+    }
 }
-}
+
