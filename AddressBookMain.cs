@@ -1,15 +1,50 @@
 using System;
+using System.Collections.Generic;
 
 namespace AddressBookUc
 {
     public class AddressBookMain
     {
+        private static AddressBook addressBook = new AddressBook();
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the Address Book System");
 
+            while (true)
+            {
+                Console.WriteLine("\nMain Menu:");
+                Console.WriteLine("1. Create New Address Book");
+                Console.WriteLine("2. Select Address Book");
+                Console.WriteLine("3. Exit");
+                Console.Write("Enter your choice: ");
 
+                string choice = Console.ReadLine();
 
+                switch (choice)
+                {
+                    case "1":
+                        Console.Write("Enter the name of the new Address Book: ");
+                        string bookName = Console.ReadLine();
+                        addressBook.CreateAddressBook(bookName);
+                        break;
+
+                    case "2":
+                        Console.Write("Enter the name of the Address Book to select: ");
+                        bookName = Console.ReadLine();
+                        ManageAddressBook(bookName);
+                        break;
+
+                    case "3":
+                        Console.WriteLine("Exiting the program. Goodbye!");
+                        return;
+
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
 
         private static void ManageAddressBook(string bookName)
         {
@@ -20,7 +55,13 @@ namespace AddressBookUc
                 Console.WriteLine("2. Display Contacts");
                 Console.WriteLine("3. Edit Contact");
                 Console.WriteLine("4. Delete Contact");
-                Console.WriteLine("5. Back to Main Menu");
+                Console.WriteLine("5. Search by City Or State ");
+                Console.WriteLine("6. Count by City");
+                Console.WriteLine("7. Sort Contacts by Name");
+                Console.WriteLine("8. Sort Contacts by City");
+                Console.WriteLine("9. Sort Contacts by State");
+                Console.WriteLine("10. Sort Contacts by Zip");
+                Console.WriteLine("11. Back to Main Menu");
                 Console.Write("Enter your choice: ");
 
                 string choice = Console.ReadLine();
@@ -45,20 +86,38 @@ namespace AddressBookUc
                         string phoneNumber = Console.ReadLine();
                         Console.Write("Email: ");
                         string email = Console.ReadLine();
-                        Contact.AddContact(bookName, firstName, lastName, address, city, state, zip, phoneNumber, email);
+
+                        Contact newContact = addressBook.CreateContact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+                        addressBook.AddContact(bookName, newContact);
                         break;
 
                     case "2":
-                        Contact.DisplayContacts(bookName);
+                        addressBook.ViewByCityOrState(bookName, false);
                         break;
 
                     case "3":
-                        Contact.edit(bookName);
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
+                        Console.Write("Enter First Name of the Contact to Edit: ");
+                        firstName = Console.ReadLine();
+                        Console.Write("Enter Last Name of the Contact to Edit: ");
+                        lastName = Console.ReadLine();
+                        addressBook.EditContact(bookName, firstName, lastName);
                         break;
-                }
-            }
+
+                    case "4":
+                        Console.Write("Enter First Name of the Contact to Delete: ");
+                        firstName = Console.ReadLine();
+                        Console.Write("Enter Last Name of the Contact to Delete: ");
+                        lastName = Console.ReadLine();
+                        addressBook.DeleteContact(bookName, firstName, lastName);
+                        break;
+
+                    case "5":
+                        Console.Write("Enter City OR State to Search: ");
+                        city = Console.ReadLine();
+                        addressBook.SearchByCityOrState(city, true);
+                        break;
+
+                    
         }
     }
 }
