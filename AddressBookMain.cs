@@ -55,7 +55,7 @@ namespace AddressBookUc
                 Console.WriteLine("2. Display Contacts");
                 Console.WriteLine("3. Edit Contact");
                 Console.WriteLine("4. Delete Contact");
-                Console.WriteLine("5. Search by City Or State ");
+                Console.WriteLine("5. Search by City ");
                 Console.WriteLine("6. Count by City");
                 Console.WriteLine("7. Sort Contacts by Name");
                 Console.WriteLine("8. Sort Contacts by City");
@@ -112,13 +112,11 @@ namespace AddressBookUc
                         break;
 
                     case "5":
-                        Console.Write("Enter City OR State to Search: ");
+                        Console.Write("Enter City to Search: ");
                         city = Console.ReadLine();
                         addressBook.SearchByCityOrState(city, true);
                         break;
-
-                    
-        }
-    }
+}
+}
 }
 

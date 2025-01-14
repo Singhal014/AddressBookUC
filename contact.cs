@@ -158,4 +158,22 @@ public class Contact
                 Console.WriteLine($"No contacts found in {(isCity ? "City" : "State")} {search}.");
             }
         }
+
+        // UC 9: View Persons by City or State
+        public void ViewByCityOrState(string search, bool isCity)
+        {
+            var results = addressBooks.Values
+                                      .SelectMany(book => book)
+                                      .Where(c => isCity ? c.City.Equals(search, StringComparison.OrdinalIgnoreCase) : c.State.Equals(search, StringComparison.OrdinalIgnoreCase))
+                                      .GroupBy(c => isCity ? c.City : c.State)
+                                      .ToDictionary(group => group.Key, group => group.ToList());
+
+            foreach (var entry in results)
+            {
+                Console.WriteLine($"Contacts in {(isCity ? "City" : "State")} {entry.Key}:");
+                foreach (var contact in entry.Value)
+                {
+                    Console.WriteLine(contact);
+                }
+            }
     }
