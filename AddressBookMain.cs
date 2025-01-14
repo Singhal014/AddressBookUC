@@ -122,6 +122,26 @@ namespace AddressBookUc
                     case "7":
                         addressBook.SortByName(bookName);
                         break;
+                    case "8":
+                        addressBook.SortByCityStateOrZip(bookName, "city");
+                        break;
+
+                    case "9":
+                        addressBook.SortByCityStateOrZip(bookName, "state");
+                        break;
+
+                    case "10":
+                        addressBook.SortByCityStateOrZip(bookName, "zip");
+                        break;
+
+                    case "11":
+                        return;
+
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
 }
 }
 }

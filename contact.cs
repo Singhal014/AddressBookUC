@@ -219,6 +219,38 @@ public class Contact
                 Console.WriteLine("Address Book not found.");
             }
         }
+        // UC 12: Sort Entries by City, State, or Zip
+        public void SortByCityStateOrZip(string bookName, string criteria)
+        {
+            if (addressBooks.ContainsKey(bookName))
+            {
+                List<Contact> sortedContacts = null;
+
+                switch (criteria.ToLower())
+                {
+                    case "city":
+                        sortedContacts = addressBooks[bookName].OrderBy(c => c.City).ThenBy(c => c.LastName).ToList();
+                        break;
+                    case "state":
+                        sortedContacts = addressBooks[bookName].OrderBy(c => c.State).ThenBy(c => c.LastName).ToList();
+                        break;
+                    case "zip":
+                        sortedContacts = addressBooks[bookName].OrderBy(c => c.Zip).ThenBy(c => c.LastName).ToList();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid sorting criteria.");
+                        return;
+                }
+
+                Console.WriteLine($"Contacts sorted by {criteria}:");
+                foreach (var contact in sortedContacts)
+                {
+                    Console.WriteLine(contact);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Address Book not found.");
         } 
         
     }
