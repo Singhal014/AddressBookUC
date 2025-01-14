@@ -176,4 +176,29 @@ public class Contact
                     Console.WriteLine(contact);
                 }
             }
+           public void CountByCityOrState()
+        {
+            var cityCounts = addressBooks.Values
+                                         .SelectMany(book => book)
+                                         .GroupBy(contact => contact.City)
+                                         .ToDictionary(group => group.Key, group => group.Count());
+
+            var stateCounts = addressBooks.Values
+                                          .SelectMany(book => book)
+                                          .GroupBy(contact => contact.State)
+                                          .ToDictionary(group => group.Key, group => group.Count());
+
+            Console.WriteLine("Count by City:");
+            foreach (var cityCount in cityCounts)
+            {
+                Console.WriteLine($"City: {cityCount.Key}, Count: {cityCount.Value}");
+            }
+
+            Console.WriteLine("Count by State:");
+            foreach (var stateCount in stateCounts)
+            {
+                Console.WriteLine($"State: {stateCount.Key}, Count: {stateCount.Value}");
+            }
+        }
     }
+}

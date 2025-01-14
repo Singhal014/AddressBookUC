@@ -116,6 +116,9 @@ namespace AddressBookUc
                         city = Console.ReadLine();
                         addressBook.SearchByCityOrState(city, true);
                         break;
+                   case "6":
+                        addressBook.CountByCityOrState();
+                        break:
 }
 }
 }
