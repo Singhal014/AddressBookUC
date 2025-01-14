@@ -119,6 +119,9 @@ namespace AddressBookUc
                    case "6":
                         addressBook.CountByCityOrState();
                         break:
+                    case "7":
+                        addressBook.SortByName(bookName);
+                        break;
 }
 }
 }

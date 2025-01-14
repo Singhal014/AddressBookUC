@@ -199,6 +199,27 @@ public class Contact
             {
                 Console.WriteLine($"State: {stateCount.Key}, Count: {stateCount.Value}");
             }
+            // UC 11: Sort Entries Alphabetically by Name
+        public void SortByName(string bookName)
+        {
+            if (addressBooks.ContainsKey(bookName))
+            {
+                var sortedContacts = addressBooks[bookName]
+                                        .OrderBy(c => c.FirstName)
+                                        .ThenBy(c => c.LastName)
+                                        .ToList();
+                Console.WriteLine("Contacts sorted by Name:");
+                foreach (var contact in sortedContacts)
+                {
+                    Console.WriteLine(contact);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Address Book not found.");
+            }
         }
+        } 
+        
     }
 }
